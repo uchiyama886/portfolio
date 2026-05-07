@@ -27,7 +27,7 @@
 | name | `color` | `var(--color-text)` |
 | name | `line-height` | `var(--line-height-tight)` |
 | name → catchphrase 間 | `margin-block-start` (catchphrase に対して) | `var(--space-3)` |
-| catchphrase | `font-size` | `var(--font-size-lg)` |
+| catchphrase | `font-size` | `var(--font-size-base)` |
 | catchphrase | `font-weight` | `var(--font-weight-regular)` |
 | catchphrase | `color` | `var(--color-text-muted)` |
 | catchphrase | `line-height` | `var(--line-height-base)` |

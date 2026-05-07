@@ -29,8 +29,9 @@
 .catchphrase {
   margin: 0;
   margin-block-start: var(--space-3);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-base);
   color: var(--color-text-muted);
+  text-wrap: balance;
 }
