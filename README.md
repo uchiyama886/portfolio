@@ -1,8 +1,10 @@
 # Uchiyama Shotaro's Portfolio
 
-React + Vite + TypeScript で構築し、GitHub Pages で公開しているポートフォリオサイトです。
+Notionで作成したポートフォリオサイトを元にClaudeに再現させた実験リポジトリです。
+React + Vite + TypeScript で構築し、GitHub Pages で公開しているので確認可能です。
 
 **Live:** https://uchiyama886.github.io/portfolio/
+**Source Notino Portfolio:** https://www.notion.so/Uchiyama-Shotaro-s-Portfolio-24d126f1c809805a8f3bcfc25bb7aceb
 
 ## Tech Stack
 
