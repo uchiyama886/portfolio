@@ -96,9 +96,8 @@ export const portfolio: Portfolio = {
     {
       platform: 'linkedin',
       label: 'LinkedIn',
-      // TODO: LinkedIn のハンドル/URL を user に確認
-      handle: 'TODO',
-      url: 'https://www.linkedin.com/',
+      handle: 'Uchiyama Shotaro',
+      url: 'https://www.linkedin.com/in/%E5%B0%86%E5%A4%AA%E6%9C%97-%E5%86%85%E5%B1%B1-5b3377361/',
     },
   ],
 
