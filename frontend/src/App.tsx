@@ -14,7 +14,7 @@ function App() {
       <Hero {...portfolio.hero} />
       <Links items={portfolio.links} />
       <About {...portfolio.about} />
-      <Skills items={portfolio.skills} />
+      <Skills items={portfolio.skills} works={portfolio.works} />
       <Works items={portfolio.works} />
       <Career items={portfolio.career} />
     </main>

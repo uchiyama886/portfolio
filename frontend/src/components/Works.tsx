@@ -38,11 +38,26 @@ function WorkCard({ work }: { work: Work }) {
     work.title
   )
 
+  const hasMeta = Boolean(work.role || work.period)
+
   return (
     <li className={styles.card}>
       <h4 className={styles.title}>{titleNode}</h4>
-      {work.period && <p className={styles.period}>{work.period}</p>}
+      {hasMeta && (
+        <p className={styles.meta}>
+          {work.role && <span className={styles.metaRole}>{work.role}</span>}
+          {work.role && work.period && (
+            <span className={styles.metaSeparator} aria-hidden="true">
+              ・
+            </span>
+          )}
+          {work.period && (
+            <span className={styles.metaPeriod}>{work.period}</span>
+          )}
+        </p>
+      )}
       <p className={styles.description}>{work.description}</p>
+      {work.outcome && <p className={styles.outcome}>{work.outcome}</p>}
       {work.stack && work.stack.length > 0 && (
         <ul className={styles.stackList}>
           {work.stack.map((tech) => (
