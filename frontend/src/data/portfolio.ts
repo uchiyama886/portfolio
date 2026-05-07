@@ -125,170 +125,138 @@ export const portfolio: Portfolio = {
   // level マッピング: ⭐️5/4 → advanced, ⭐️3 → intermediate, ⭐️2/1 → beginner。
   // category は Notion 側の値（Frontend / Backend / Database / DevTools / Other）をそのまま使用。
   skills: [
-    { name: 'Java', level: 'beginner', category: 'Backend' },
-    { name: 'Python', level: 'beginner', category: 'Backend' },
-    { name: 'JavaScript', level: 'intermediate', category: 'Frontend' },
-    { name: 'TypeScript', level: 'intermediate', category: 'Frontend' },
-    { name: 'HTML・CSS', level: 'beginner', category: 'Frontend' },
-    { name: 'macOS', level: 'beginner', category: 'DevTools' },
     { name: 'PHP', level: 'beginner', category: 'Backend' },
-    { name: 'GitHub・Git', level: 'beginner', category: 'DevTools' },
+    { name: 'JavaScript', level: 'intermediate', category: 'Frontend' },
     { name: 'C#(Unity)', level: 'beginner', category: 'Other' },
+    { name: 'GitHub・Git', level: 'beginner', category: 'DevTools' },
+    { name: 'TypeScript', level: 'intermediate', category: 'Frontend' },
+    { name: 'macOS', level: 'beginner', category: 'DevTools' },
     { name: 'SQL', level: 'beginner', category: 'Database' },
+    { name: 'Python', level: 'beginner', category: 'Backend' },
+    { name: 'Java', level: 'beginner', category: 'Backend' },
+    { name: 'HTML・CSS', level: 'beginner', category: 'Frontend' },
   ],
   // NOTION_SYNC_END: skills
 
   // NOTION_SYNC_START: works
   // Notion DB「チーム開発」「ハッカソン」「個人制作物」より同期。
-  // テンプレートの「新規ページ」と「シンギング・グラス」配下の制作過程サブページは除外。
-  // stack の値は Skills.name と一致させると関連 Work として該当チップ選択時に表示される
-  // （例: "C#(Unity)" / "HTML・CSS" の合体表記）。Notion 側の元 multi-select 値も併記。
+  // テンプレートの「新規ページ」は除外。
+  // stack は Notion「使用言語など」の値をそのまま使用（Skills.name との一致で関連 Work を導出）。
   works: [
-    // ─── チーム開発 ───
     {
       title: 'ウェーブレット変換アプリケーション',
       category: 'team',
-      description:
-        '授業課題として PM を担当。HTML / CSS / Python / Java / Shell を組み合わせて実装。',
+      description: 'PM、HTML / CSS / Python / Shell / Java、2024-09',
       url: 'https://github.com/uchiyama886/ProjectPractice',
-      stack: ['HTML・CSS', 'Python', 'Java', 'Shell'],
+      stack: ['HTML', 'CSS', 'Python', 'Shell', 'Java'],
       period: '2024-09',
       role: 'PM',
     },
     {
-      title: 'BitSummit GameJam 2023',
+      title: 'BitSummit GameJam2025',
       category: 'team',
-      description:
-        '授業外のチーム制作。PM 兼プログラマとして Unity / C# でゲーム作品「Gingaenzetsu」を制作。',
-      url: 'https://github.com/Usagisansesu/Gingaenzetsu',
-      stack: ['C#(Unity)'],
-      period: '2023-04 〜 2023-07',
-      role: 'PM / プログラマ',
-    },
-    {
-      title: 'BitSummit GameJam 2025',
-      category: 'team',
-      description:
-        '授業外のチーム制作。プログラマとして Unity / C# でゲーム作品「konkoro」を制作。',
+      description: 'プログラマ、Unity / C#、2025-04',
       url: 'https://github.com/void2610/bsgj2025-team5',
-      stack: ['C#(Unity)'],
-      period: '2025-04 〜 2025-07',
+      stack: ['Unity', 'C#'],
+      period: '2025-04',
       role: 'プログラマ',
     },
-
-    // ─── ハッカソン ───
     {
-      title: 'KC3Hack 2025',
-      category: 'hackathon',
-      description:
-        '関西の学生エンジニアが集う学外ハッカソン。フロントエンド / バックエンド / デザイナー / スライド作成を兼任。',
-      url: 'https://github.com/kc3hack/2025_2',
-      period: '2025-02-09 〜 2025-02-24',
-      role: 'メンバー (FE / BE / Design / Slides)',
+      title: 'BitSummit GameJam 2023',
+      category: 'team',
+      description: 'PM / プログラマ、Unity / C#、2023-04',
+      url: 'https://github.com/Usagisansesu/Gingaenzetsu',
+      stack: ['Unity', 'C#'],
+      period: '2023-04',
+      role: 'PM / プログラマ',
     },
     {
       title: '京都イノベーションハッカソン',
       category: 'hackathon',
-      description:
-        '学外ハッカソンに参加。フロントエンドとスライド作成を担当。',
-      url: 'https://github.com/ReiwaPonpoco/KIH_hackathon',
-      period: '2023-09-09 〜 2023-09-10',
-      role: 'メンバー (FE / Slides)',
+      description: 'メンバー / フロントエンド / スライド作成、2023-09',
+      period: '2023-09',
+      role: 'メンバー / フロントエンド / スライド作成',
     },
     {
-      title: 'あまてく x PeachTech コラボハッカソン',
+      title: 'あまてく x PeachTechコラボハッカソン',
       category: 'hackathon',
-      description:
-        '学生団体「あまてく」と PeachTech との合同イベントにメンターとして参加。',
-      url: 'https://x.com/PeachTech_0927/status/1921918280727445748',
-      period: '2025-05-12 〜 2025-05-25',
-      role: 'メンター',
+      description: '2025-05',
+      period: '2025-05',
     },
     {
-      title: 'あまてく奈良ハッカソン 2024 春',
+      title: '関西ビギナーズハッカソンVol.2',
       category: 'hackathon',
-      description:
-        'あまてく主催の団体内ハッカソンに参加。フロントエンド / デザイナー / スライド作成を担当。',
-      url: 'https://github.com/K-Ryo-ta/narahackathon',
-      period: '2024-03-18 〜 2024-03-19',
-      role: 'メンバー (FE / Design / Slides)',
+      description: 'フロントエンド / メンバー / スライド作成、2023-08',
+      period: '2023-08',
+      role: 'フロントエンド / メンバー / スライド作成',
     },
     {
-      title: '関西ビギナーズハッカソン Vol.6',
+      title: '関西ビギナーズハッカソンVol.6',
       category: 'hackathon',
-      description:
-        'チーム PM として学外ハッカソンに参加。フロントエンド / バックエンド / デザインも兼任。',
-      url: 'https://github.com/uchiyama886/KBH2025_TEAM05',
-      period: '2025-08-27 〜 2025-08-29',
-      role: 'PM (FE / BE / Design / Slides)',
+      description: 'フロントエンド / バックエンド / PM / デザイナー / スライド作成、2025-08',
+      period: '2025-08',
+      role: 'フロントエンド / バックエンド / PM / デザイナー / スライド作成',
     },
     {
-      title: '関西ビギナーズハッカソン Vol.2',
+      title: 'あまてく奈良ハッカソン2024春',
       category: 'hackathon',
-      description:
-        '学外ハッカソンに参加。フロントエンドとスライド作成を担当。',
-      url: 'https://github.com/yuta925/SpeakerCheck',
-      period: '2023-08-25 〜 2023-08-28',
-      role: 'メンバー (FE / Slides)',
+      description: 'フロントエンド / メンバー / スライド作成 / デザイナー、2024-03',
+      period: '2024-03',
+      role: 'フロントエンド / メンバー / スライド作成 / デザイナー',
     },
     {
-      title: '関西ビギナーズハッカソン Vol.3',
+      title: '関西ビギナーズハッカソンVol.3',
       category: 'hackathon',
-      description:
-        '学外ハッカソンに参加。フロントエンドとスライド作成を担当。',
-      url: 'https://github.com/SEKI-YUTA/BeginnersHackathon2024_Spring',
-      period: '2024-03-08 〜 2024-03-11',
-      role: 'メンバー (FE / Slides)',
-    },
-
-    // ─── 個人制作 ───
-    {
-      title: 'シンギング・グラス',
-      category: 'personal',
-      description:
-        'Arduino IDE と M5 Stack を用いた IoT プロトタイピング作品。圧力センサー実験から音響連携まで段階的に検証し、複数層のプロトタイピング過程を記録。',
-      url: 'https://www.notion.so/2cd126f1c8098004bd5bea6d055ddbc1',
-      stack: ['Arduino IDE', 'M5 Stack'],
-      period: '2025-10 〜 2026-03',
+      description: 'フロントエンド / メンバー / スライド作成、2024-03',
+      period: '2024-03',
+      role: 'フロントエンド / メンバー / スライド作成',
     },
     {
-      title: 'カンバン形式タスク管理アプリ',
-      category: 'personal',
-      description:
-        'Vue.js / Node.js でカンバン UI を実装した個人制作物。Prettier / ESLint / vitest を導入し、フロントの品質基盤を素振り。',
-      stack: ['Node.js', 'Vue.js', 'Prettier', 'ESLint', 'vitest'],
-      period: '2025-07-24 〜 2025-07-30',
+      title: 'KC3Hack 2025',
+      category: 'hackathon',
+      description: 'フロントエンド / バックエンド / メンバー / デザイナー / スライド作成、2025-02',
+      period: '2025-02',
+      role: 'フロントエンド / バックエンド / メンバー / デザイナー / スライド作成',
     },
     {
       title: '魔法陣＝音楽アプリ（予定）',
       category: 'personal',
-      description:
-        '魔法陣の図形操作と音楽再生を組み合わせたアプリ（構想段階）。',
+      description: '魔法陣＝音楽アプリ（予定）',
     },
     {
       title: '制御構文チェッカー',
       category: 'personal',
-      description:
-        'プログラムの制御構文を静的に検査するユーティリティ。Make / bash / Ant (build.xml) で構成。',
+      description: 'Make / bash / build.xml',
       stack: ['Make', 'bash', 'build.xml'],
-      period: '2025-12-27',
+    },
+    {
+      title: 'カンバン形式タスク管理アプリ',
+      category: 'personal',
+      description: 'Node.js / Vue.js / Prettier / ESLint / vitest',
+      stack: ['Node.js', 'Vue.js', 'Prettier', 'ESLint', 'vitest'],
+    },
+    {
+      title: 'シンギング・グラス',
+      category: 'personal',
+      description: 'Arduino IDE / M5 Stack',
+      stack: ['Arduino IDE', 'M5 Stack'],
     },
   ],
   // NOTION_SYNC_END: works
 
   // NOTION_SYNC_START: career
   // Notion DB「経歴」より同期。
-  // 期間と職種・役割の列は Notion 側に値が入っていなかったため TODO のまま残置。
+  // 期間・役割・内容が Notion 側未入力の場合は TODO プレースホルダを保持。
   career: [
     {
-      company: 'Digital Garage',
-      role: '3days サマーインターン',
+      company: 'Degital Garage 3daysインターン',
+      role: 'TODO: Notion「経歴」DB の「職種・役割」が未入力',
       period: 'TODO: Notion「経歴」DB の「時期」が未入力',
       description: 'TODO: 取り組んだ内容を 1〜2 文で。',
     },
     {
-      company: 'Rakus TechLab.',
-      role: '3days サマーインターン',
+      company: 'Rakus TechLab. 3daysインターン',
+      role: 'TODO: Notion「経歴」DB の「職種・役割」が未入力',
       period: 'TODO: Notion「経歴」DB の「時期」が未入力',
       description: 'TODO: 取り組んだ内容を 1〜2 文で。',
     },

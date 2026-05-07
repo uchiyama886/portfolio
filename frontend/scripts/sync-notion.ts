@@ -5,7 +5,7 @@
  * NOTION_SYNC_START / NOTION_SYNC_END マーカー間の内容を置換する。
  *
  * 必要な環境変数（.claude/settings.local.json の env セクションに設定）:
- *   NOTION_TOKEN          - Notion インテグレーショントークン
+ *   NOTION_TOKEN          - Notion インテグレーショントークン（ntn_xxx 形式）
  *   NOTION_DB_SKILLS      - 言語・技術 DB の ID
  *   NOTION_DB_TEAM_WORKS  - チーム開発 DB の ID
  *   NOTION_DB_HACKATHON   - ハッカソン DB の ID
@@ -16,14 +16,7 @@
  */
 
 import { Client, isFullPage } from '@notionhq/client'
-import type {
-  PageObjectResponse,
-  MultiSelectPropertyItemObjectResponse,
-  SelectPropertyItemObjectResponse,
-  NumberPropertyItemObjectResponse,
-  UrlPropertyItemObjectResponse,
-  RichTextPropertyItemObjectResponse,
-} from '@notionhq/client/build/src/api-endpoints.js'
+import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js'
 import { readFileSync, writeFileSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -67,23 +60,22 @@ interface CareerEntry {
 const PROPS = {
   skills: {
     name: '名前',
-    rating: 'Rating',
-    category: 'Category',
+    level: 'レベル',     // select: "⭐️" / "⭐️⭐️" / ... (⭐️の数でレベルを判定)
+    category: 'カテゴリ', // select: Frontend / Backend / etc.
   },
   works: {
     name: '名前',
-    url: 'URL',
-    stack: 'Stack',
-    period: '期間',
-    role: '役割',
-    outcome: '成果',
+    github: 'GitHub',       // files (external URL)
+    stack: '使用言語など',  // multi_select
+    period: '期間',         // date
+    role: '担当',           // multi_select
+    outcome: '成果',        // rich_text (任意)
   },
   career: {
-    name: '名前',
-    role: '役割',
-    period: '時期',
-    description: '内容',
-    url: 'URL',
+    name: '企業分類',       // title (企業名 + 種別が結合された形式)
+    role: '職種・役割',     // multi_select
+    period: '時期',         // date
+    description: '内容',    // rich_text
   },
 } as const
 
@@ -114,7 +106,7 @@ function getTitle(page: PageObjectResponse): string {
   return titleProp.title.map(t => t.plain_text).join('')
 }
 
-function getPropByName(
+function getProp(
   page: PageObjectResponse,
   name: string,
 ): PageObjectResponse['properties'][string] | undefined {
@@ -122,42 +114,52 @@ function getPropByName(
 }
 
 function getRichText(page: PageObjectResponse, name: string): string {
-  const prop = getPropByName(page, name)
+  const prop = getProp(page, name)
   if (!prop || prop.type !== 'rich_text') return ''
-  return (prop as RichTextPropertyItemObjectResponse).rich_text
-    .map(t => t.plain_text)
-    .join('')
-}
-
-function getNumber(page: PageObjectResponse, name: string): number | null {
-  const prop = getPropByName(page, name)
-  if (!prop || prop.type !== 'number') return null
-  return (prop as NumberPropertyItemObjectResponse).number
+  return prop.rich_text.map(t => t.plain_text).join('')
 }
 
 function getSelect(page: PageObjectResponse, name: string): string | null {
-  const prop = getPropByName(page, name)
+  const prop = getProp(page, name)
   if (!prop || prop.type !== 'select') return null
-  return (prop as SelectPropertyItemObjectResponse).select?.name ?? null
+  return prop.select?.name ?? null
 }
 
 function getMultiSelect(page: PageObjectResponse, name: string): string[] {
-  const prop = getPropByName(page, name)
+  const prop = getProp(page, name)
   if (!prop || prop.type !== 'multi_select') return []
-  return (prop as MultiSelectPropertyItemObjectResponse).multi_select.map(s => s.name)
+  return prop.multi_select.map(s => s.name)
 }
 
-function getUrl(page: PageObjectResponse, name: string): string | undefined {
-  const prop = getPropByName(page, name)
-  if (!prop || prop.type !== 'url') return undefined
-  return (prop as UrlPropertyItemObjectResponse).url ?? undefined
+function getDate(page: PageObjectResponse, name: string): string | undefined {
+  const prop = getProp(page, name)
+  if (!prop || prop.type !== 'date') return undefined
+  return prop.date?.start ?? undefined
+}
+
+// files プロパティから最初の external URL を取得
+function getFileUrl(page: PageObjectResponse, name: string): string | undefined {
+  const prop = getProp(page, name)
+  if (!prop || prop.type !== 'files') return undefined
+  for (const file of prop.files) {
+    if (file.type === 'external') return file.external.url
+  }
+  return undefined
+}
+
+// "⭐️⭐️⭐️" 形式の select → SkillLevel に変換
+function starsToLevel(stars: string | null): SkillLevel {
+  if (!stars) return 'beginner'
+  const count = (stars.match(/⭐/g) ?? []).length
+  return count >= 4 ? 'advanced' : count === 3 ? 'intermediate' : 'beginner'
 }
 
 // ---------- Skills フェッチ ----------
 
 async function fetchSkills(notion: Client): Promise<Skill[]> {
-  const dbId = process.env.NOTION_DB_SKILLS!
-  const response = await notion.databases.query({ database_id: dbId })
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_DB_SKILLS!,
+  })
 
   return response.results
     .filter(isFullPage)
@@ -165,9 +167,7 @@ async function fetchSkills(notion: Client): Promise<Skill[]> {
       const name = getTitle(page)
       if (!name || name.startsWith('新規ページ')) return null
 
-      const rating = getNumber(page, PROPS.skills.rating) ?? 1
-      const level: SkillLevel =
-        rating >= 4 ? 'advanced' : rating === 3 ? 'intermediate' : 'beginner'
+      const level = starsToLevel(getSelect(page, PROPS.skills.level))
       const category = getSelect(page, PROPS.skills.category) ?? undefined
 
       return { name, level, ...(category ? { category } : {}) } satisfies Skill
@@ -190,13 +190,16 @@ async function fetchWorksFromDb(
       const title = getTitle(page)
       if (!title || title.startsWith('新規ページ')) return null
 
-      const url = getUrl(page, PROPS.works.url)
+      const url = getFileUrl(page, PROPS.works.github)
       const stack = getMultiSelect(page, PROPS.works.stack)
-      const period = getRichText(page, PROPS.works.period) || undefined
-      const role = getRichText(page, PROPS.works.role) || undefined
+      const dateStr = getDate(page, PROPS.works.period)
+      // date は "YYYY-MM-DD" 形式で来るので年月のみに整形
+      const period = dateStr ? dateStr.slice(0, 7) : undefined
+      const roleArr = getMultiSelect(page, PROPS.works.role)
+      const role = roleArr.length > 0 ? roleArr.join(' / ') : undefined
       const outcome = getRichText(page, PROPS.works.outcome) || undefined
 
-      // description は role / stack / period から再構成
+      // description: role + stack から簡潔に組み立てる
       const parts: string[] = []
       if (role) parts.push(role)
       if (stack.length > 0) parts.push(stack.join(' / '))
@@ -229,33 +232,31 @@ async function fetchAllWorks(notion: Client): Promise<Work[]> {
 // ---------- Career フェッチ ----------
 
 async function fetchCareer(notion: Client): Promise<CareerEntry[]> {
-  const dbId = process.env.NOTION_DB_CAREER!
-  const response = await notion.databases.query({ database_id: dbId })
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_DB_CAREER!,
+  })
 
   return response.results
     .filter(isFullPage)
     .map(page => {
+      // 企業分類は title プロパティ（会社名 + 種別が結合されている）
       const company = getTitle(page)
       if (!company || company.startsWith('新規ページ')) return null
 
+      const roleArr = getMultiSelect(page, PROPS.career.role)
       const role =
-        getRichText(page, PROPS.career.role) ||
-        "TODO: Notion「経歴」DB の「役割」が未入力"
-      const period =
-        getRichText(page, PROPS.career.period) ||
-        "TODO: Notion「経歴」DB の「時期」が未入力"
+        roleArr.length > 0
+          ? roleArr.join(' / ')
+          : "TODO: Notion「経歴」DB の「職種・役割」が未入力"
+      const dateStr = getDate(page, PROPS.career.period)
+      const period = dateStr
+        ? dateStr.slice(0, 7)
+        : "TODO: Notion「経歴」DB の「時期」が未入力"
       const description =
         getRichText(page, PROPS.career.description) ||
         "TODO: 取り組んだ内容を 1〜2 文で。"
-      const url = getUrl(page, PROPS.career.url)
 
-      return {
-        company,
-        role,
-        period,
-        description,
-        ...(url ? { url } : {}),
-      } satisfies CareerEntry
+      return { company, role, period, description } satisfies CareerEntry
     })
     .filter((c): c is CareerEntry => c !== null)
 }
@@ -267,11 +268,12 @@ function escapeStr(s: string): string {
 }
 
 function genSkills(skills: Skill[]): string {
-  const lines = skills.map(s => {
-    const cat = s.category ? `, category: '${escapeStr(s.category)}'` : ''
-    return `    { name: '${escapeStr(s.name)}', level: '${s.level}'${cat} },`
-  })
-  return lines.join('\n')
+  return skills
+    .map(s => {
+      const cat = s.category ? `, category: '${escapeStr(s.category)}'` : ''
+      return `    { name: '${escapeStr(s.name)}', level: '${s.level}'${cat} },`
+    })
+    .join('\n')
 }
 
 function genWorks(works: Work[]): string {
@@ -318,14 +320,16 @@ function replaceSection(
   const start = `// NOTION_SYNC_START: ${key}`
   const end = `// NOTION_SYNC_END: ${key}`
 
-  // skills は "skills: [\n...\n  ]," の形式、works/career も同様
   const fieldName = key
-  const newBlock =
+  const header =
     key === 'skills'
-      ? `${start}\n  // Notion DB「言語・技術」より同期。\n  // level マッピング: ⭐️5/4 → advanced, ⭐️3 → intermediate, ⭐️2/1 → beginner。\n  // category は Notion 側の値（Frontend / Backend / Database / DevTools / Other）をそのまま使用。\n  ${fieldName}: [\n${innerLines}\n  ],\n  ${end}`
+      ? `  // Notion DB「言語・技術」より同期。\n  // level マッピング: ⭐️5/4 → advanced, ⭐️3 → intermediate, ⭐️2/1 → beginner。\n  // category は Notion 側の値（Frontend / Backend / Database / DevTools / Other）をそのまま使用。`
       : key === 'works'
-        ? `${start}\n  // Notion DB「チーム開発」「ハッカソン」「個人制作物」より同期。\n  // テンプレートの「新規ページ」と「シンギング・グラス」配下の制作過程サブページは除外。\n  // stack の値は Skills.name と一致させると関連 Work として該当チップ選択時に表示される\n  // （例: "C#(Unity)" / "HTML・CSS" の合体表記）。Notion 側の元 multi-select 値も併記。\n  ${fieldName}: [\n${innerLines}\n  ],\n  ${end}`
-        : `${start}\n  // Notion DB「経歴」より同期。\n  // 期間と職種・役割の列は Notion 側に値が入っていなかったため TODO のまま残置。\n  ${fieldName}: [\n${innerLines}\n  ],\n  ${end}`
+        ? `  // Notion DB「チーム開発」「ハッカソン」「個人制作物」より同期。\n  // テンプレートの「新規ページ」は除外。\n  // stack は Notion「使用言語など」の値をそのまま使用（Skills.name との一致で関連 Work を導出）。`
+        : `  // Notion DB「経歴」より同期。\n  // 期間・役割・内容が Notion 側未入力の場合は TODO プレースホルダを保持。`
+
+  const newBlock =
+    `${start}\n${header}\n  ${fieldName}: [\n${innerLines}\n  ],\n  ${end}`
 
   const regex = new RegExp(`${start}[\\s\\S]*?${end}`, 'm')
   if (!regex.test(content)) {
