@@ -88,9 +88,7 @@ export const portfolio: Portfolio = {
     name: 'Uchiyama Shotaro',
     catchphrase:
       '💻 課題を正面から捉え、チームと共にコードで解決するエンジニアを目指しています。',
-    // TODO: Notion ページアイコン (icon02_character_2048x2048.png) を frontend/public/ に
-    // 配置後、'/icon-character.png' などのパスを設定。
-    iconSrc: undefined,
+    iconSrc: 'icon-character.png',
   },
 
   links: [
