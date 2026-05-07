@@ -74,9 +74,9 @@ export interface Portfolio {
 export const portfolio: Portfolio = {
   hero: {
     name: 'Uchiyama Shotaro',
-    // TODO: 最終的なキャッチコピーを user に確認
-    catchphrase: 'Student engineer building things on the web.',
-    // TODO: アイコン画像を public/ に配置してパスを設定
+    catchphrase:
+      '💻 課題を正面から捉え、チームと共にコードで解決するエンジニアを目指しています。',
+    // TODO: アイコン画像を frontend/public/ に配置後、'/icon-character.png' などのパスを設定
     iconSrc: undefined,
   },
 
