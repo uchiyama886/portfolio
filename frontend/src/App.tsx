@@ -1,4 +1,5 @@
 import { About } from './components/About'
+import { Career } from './components/Career'
 import { Hero } from './components/Hero'
 import { Links } from './components/Links'
 import { Skills } from './components/Skills'
@@ -15,6 +16,7 @@ function App() {
       <About {...portfolio.about} />
       <Skills items={portfolio.skills} />
       <Works items={portfolio.works} />
+      <Career items={portfolio.career} />
     </main>
   )
 }
