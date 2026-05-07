@@ -7,7 +7,10 @@
 
 | タスク名 | チーム | タイミング | 日付 | 補足 | 状態 |
 |---------|--------|-----------|------|------|------|
-| <!-- 例: startup-test 実行 | frontend | start | 2026-05-06 | main | counting (1/3) --> | | | | | |
+| dev server 起動 + 視覚レビュー疎通 (curl) | frontend | end | 2026-05-07 | feature/initial-portfolio Step 4 で実行 | counting (1/3) |
+| lint + build 連続実行 (push直前) | cicd | end | 2026-05-07 | feature/initial-portfolio で 2 回（初回レビュー時 / 再設計後） | counting (1/3) |
+| compare URL 方式の PR 作成 (gh未導入) | cicd | end | 2026-05-07 | feature/initial-portfolio → main | counting (1/3) |
+| 機能単位の 3 コミット分割 (design-CSS / design-spec+globals / frontend-types+JSX) | cicd | end | 2026-05-07 | チーム境界に対応する分割 | counting (1/3) |
 
 ## 自動化済み
 

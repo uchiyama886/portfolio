@@ -5,7 +5,9 @@
 ## 含まれるファイル
 
 - `repeated-tasks.md` — セッション開始/終了で繰り返された作業のカウンタ。自動化判定の元データ。
-- （今後追加） `<topic>.md` — 特定トピックの蓄積知見
+- `frontend-jsx-tokens-collab.md` — Frontend と Design の協業境界。意味的 class 名がもたらした効果と限界（2026-05-07）
+- `responsive-scale-strategy.md` — 720px narrow column の落とし穴と 2 段ブレークポイント方針（2026-05-07）
+- `pr-creation-without-gh.md` — gh 未導入環境で PR を作るための compare URL 組み立て手順（2026-05-07）
 
 ## ルール
 
