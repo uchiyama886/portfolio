@@ -15,25 +15,27 @@
   margin-block-start: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-3);
 }
 
 .group {
-  display: block;
+  display: grid;
+  grid-template-columns: minmax(96px, max-content) 1fr;
+  align-items: baseline;
+  column-gap: var(--space-4);
 }
 
 .groupLabel {
   margin: 0;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-base);
   color: var(--color-text-muted);
 }
 
 .chipList {
   list-style: none;
   margin: 0;
-  margin-block-start: var(--space-3);
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -48,4 +50,11 @@
   font-size: var(--font-size-sm);
   line-height: var(--line-height-base);
   border-radius: var(--radius-pill);
+}
+
+@media (max-width: 480px) {
+  .group {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-2);
+  }
 }

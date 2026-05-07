@@ -25,10 +25,14 @@ About セクションに続くスキル一覧。`portfolio.skills` の各 `{ nam
 - セクション上下 padding: `--space-7` (48px)
 - 見出し（h2: "Skills"）→ カテゴリ群 の縦並び
 - 見出しと最初のカテゴリ間: `--space-5` (24px)
-- カテゴリ間: `--space-5` (24px)
-- 1 カテゴリ内: 小見出し（h3） + pill チップの flex-wrap グリッド
-- 小見出しとチップ群の間: `--space-3` (12px)
-- チップ間 gap: `--space-2` (8px) 縦横とも
+- カテゴリ間: `--space-3` (12px) — Notion の multi-select 行のような密度
+- **1 カテゴリ = 横 1 行**: ラベル（h3）が左、チップ群が右に並ぶ 2 カラム grid
+  - grid-template-columns: `minmax(96px, max-content) 1fr`
+  - align-items: `baseline`
+  - column-gap: `--space-4` (16px)
+- ラベルは inline / muted （Notion property name 風）
+- チップ群は flex-wrap、行内 gap `--space-2` (8px)
+- モバイル幅 (<480px): grid を解除し、ラベルの上にチップ群が縦積みになる
 
 ## チップ仕様
 
@@ -49,11 +53,13 @@ About セクションに続くスキル一覧。`portfolio.skills` の各 `{ nam
 | heading (h2) | `color` | `var(--color-text)` |
 | heading (h2) | `line-height` | `var(--line-height-tight)` |
 | heading → カテゴリ群間 | `margin-block-start` (groups 側) | `var(--space-5)` |
-| カテゴリ間 | `gap` (groups の flex-column) | `var(--space-5)` |
-| 小見出し (h3) | `font-size` | `var(--font-size-base)` |
-| 小見出し (h3) | `font-weight` | `var(--font-weight-semibold)` |
+| カテゴリ間 | `gap` (groups の flex-column) | `var(--space-3)` |
+| group | `display` | `grid` (`grid-template-columns: minmax(96px, max-content) 1fr`) |
+| group | `align-items` | `baseline` |
+| group | `column-gap` | `var(--space-4)` |
+| 小見出し (h3) | `font-size` | `var(--font-size-sm)` |
+| 小見出し (h3) | `font-weight` | `var(--font-weight-medium)` |
 | 小見出し (h3) | `color` | `var(--color-text-muted)` |
-| 小見出し → チップ間 | `margin-block-start` (chip list 側) | `var(--space-3)` |
 | chip list | `display` / `gap` | `flex` + `flex-wrap: wrap` / `var(--space-2)` |
 | chip background | `background` | `var(--color-surface)` |
 | chip color | `color` | `var(--color-text)` |
@@ -72,8 +78,9 @@ About セクションに続くスキル一覧。`portfolio.skills` の各 `{ nam
 
 ## レスポンシブ
 
-- モバイル幅でも flex-wrap が自然に縦に折り返す
-- font-size と padding はそのまま維持
+- ≥ 480px: 横 grid（label | chips）を維持。chips は flex-wrap で自然に折返し
+- < 480px: `grid-template-columns: 1fr` に切替え、ラベルの上にチップ群が縦積み（密度を保ったまま狭幅対応）
+- font-size と padding は固定
 
 ## 視覚レビュー基準（Step 4 で参照）
 
