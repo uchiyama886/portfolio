@@ -18,9 +18,13 @@ export interface SocialLink {
   url: string
 }
 
+export type SkillLevel = 'advanced' | 'intermediate' | 'beginner'
+
 export interface Skill {
   name: string
-  // 任意のカテゴリ（言語 / フレームワーク / ツール / OS など）
+  // 習熟度（Skills セクションの主軸グルーピング）
+  level: SkillLevel
+  // 任意のカテゴリ（言語 / フレームワーク / ツール / OS など）— 表示には使わないが将来用に保持
   category?: string
 }
 
@@ -32,10 +36,14 @@ export interface Work {
   description: string
   // 公開リポジトリやデモがあれば
   url?: string
-  // 主な使用技術
+  // 主な使用技術 — Skills チップとマッチさせて関連 Work 一覧を導出する
   stack?: string[]
   // 開催年や期間 (例: "2024", "2024-04 〜 2024-08")
   period?: string
+  // 担当した役割（例: "PM", "Frontend", "Solo"）
+  role?: string
+  // 成果 / 学び（1行ハイライト。例: "学内コンテスト 1位", "OSS 公開"）
+  outcome?: string
 }
 
 export interface CareerEntry {
@@ -74,9 +82,9 @@ export interface Portfolio {
 export const portfolio: Portfolio = {
   hero: {
     name: 'Uchiyama Shotaro',
-    // TODO: 最終的なキャッチコピーを user に確認
-    catchphrase: 'Student engineer building things on the web.',
-    // TODO: アイコン画像を public/ に配置してパスを設定
+    catchphrase:
+      '💻 課題を正面から捉え、チームと共にコードで解決するエンジニアを目指しています。',
+    // TODO: アイコン画像を frontend/public/ に配置後、'/icon-character.png' などのパスを設定
     iconSrc: undefined,
   },
 
@@ -96,9 +104,8 @@ export const portfolio: Portfolio = {
     {
       platform: 'linkedin',
       label: 'LinkedIn',
-      // TODO: LinkedIn のハンドル/URL を user に確認
-      handle: 'TODO',
-      url: 'https://www.linkedin.com/',
+      handle: 'Uchiyama Shotaro',
+      url: 'https://www.linkedin.com/in/%E5%B0%86%E5%A4%AA%E6%9C%97-%E5%86%85%E5%B1%B1-5b3377361/',
     },
   ],
 
@@ -111,37 +118,49 @@ export const portfolio: Portfolio = {
     ],
   },
 
+  // TODO: 各スキルの level は user 本人による最終確認が必要。
+  // 暫定割当: 主言語/長期プロジェクト=advanced、複数経験=intermediate、学習中=beginner
   skills: [
-    { name: 'Python', category: 'language' },
-    { name: 'Java', category: 'language' },
-    { name: 'JavaScript', category: 'language' },
-    { name: 'TypeScript', category: 'language' },
-    { name: 'HTML/CSS', category: 'language' },
-    { name: 'PHP', category: 'language' },
-    { name: 'SQL', category: 'language' },
-    { name: 'C# (Unity)', category: 'language' },
-    { name: 'GitHub / Git', category: 'tool' },
-    { name: 'macOS', category: 'os' },
+    { name: 'Python', level: 'advanced', category: 'language' },
+    { name: 'Java', level: 'intermediate', category: 'language' },
+    { name: 'JavaScript', level: 'intermediate', category: 'language' },
+    { name: 'TypeScript', level: 'intermediate', category: 'language' },
+    { name: 'HTML/CSS', level: 'intermediate', category: 'language' },
+    { name: 'PHP', level: 'beginner', category: 'language' },
+    { name: 'SQL', level: 'beginner', category: 'language' },
+    { name: 'C# (Unity)', level: 'beginner', category: 'language' },
+    { name: 'GitHub / Git', level: 'advanced', category: 'tool' },
+    { name: 'macOS', level: 'advanced', category: 'os' },
   ],
 
+  // TODO: 各 Work の中身は user 本人が埋める。stack の値が Skill.name と一致すると
+  // Skills セクションの該当チップから関連 Work として表示される（大文字小文字無視）。
   works: [
-    // TODO: チーム開発の実績を user に確認して追加
     {
       title: 'TODO: チーム開発プロジェクト名',
       category: 'team',
-      description: 'TODO: 概要を1〜2文で。',
+      description: 'TODO: どんなプロジェクトで、どんな課題を、どう解決したかを 2〜3 文で。',
+      role: 'TODO: 例 "Frontend 担当" / "PM" / "全体設計"',
+      outcome: 'TODO: 例 "学内コンテスト1位" / "ユーザ100人到達"',
+      stack: ['TypeScript', 'Python'],
+      period: 'TODO: 例 "2024-06 〜 2024-09"',
     },
-    // TODO: ハッカソン参加作品
     {
       title: 'TODO: ハッカソン作品名',
       category: 'hackathon',
-      description: 'TODO: 概要を1〜2文で。',
+      description: 'TODO: テーマ・自分のロール・実装した機能を 2〜3 文で。',
+      role: 'TODO: 例 "Backend 兼 LT 発表"',
+      outcome: 'TODO: 例 "Best Tech Award 受賞"',
+      stack: ['JavaScript', 'C# (Unity)'],
+      period: 'TODO: 例 "2024-08（48h）"',
     },
-    // TODO: 個人制作
     {
       title: 'TODO: 個人制作物名',
       category: 'personal',
-      description: 'TODO: 概要を1〜2文で。',
+      description: 'TODO: 動機・作ったもの・公開状態を 2〜3 文で。',
+      outcome: 'TODO: 例 "OSS 公開、★50"',
+      stack: ['Python', 'SQL'],
+      period: 'TODO: 例 "2025"',
     },
   ],
 
