@@ -120,6 +120,7 @@ export const portfolio: Portfolio = {
     ],
   },
 
+  // NOTION_SYNC_START: skills
   // Notion DB「言語・技術」より同期。
   // level マッピング: ⭐️5/4 → advanced, ⭐️3 → intermediate, ⭐️2/1 → beginner。
   // category は Notion 側の値（Frontend / Backend / Database / DevTools / Other）をそのまま使用。
@@ -135,7 +136,9 @@ export const portfolio: Portfolio = {
     { name: 'C#(Unity)', level: 'beginner', category: 'Other' },
     { name: 'SQL', level: 'beginner', category: 'Database' },
   ],
+  // NOTION_SYNC_END: skills
 
+  // NOTION_SYNC_START: works
   // Notion DB「チーム開発」「ハッカソン」「個人制作物」より同期。
   // テンプレートの「新規ページ」と「シンギング・グラス」配下の制作過程サブページは除外。
   // stack の値は Skills.name と一致させると関連 Work として該当チップ選択時に表示される
@@ -271,7 +274,9 @@ export const portfolio: Portfolio = {
       period: '2025-12-27',
     },
   ],
+  // NOTION_SYNC_END: works
 
+  // NOTION_SYNC_START: career
   // Notion DB「経歴」より同期。
   // 期間と職種・役割の列は Notion 側に値が入っていなかったため TODO のまま残置。
   career: [
@@ -288,4 +293,5 @@ export const portfolio: Portfolio = {
       description: 'TODO: 取り組んだ内容を 1〜2 文で。',
     },
   ],
+  // NOTION_SYNC_END: career
 }
