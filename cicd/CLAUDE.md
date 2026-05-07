@@ -58,3 +58,4 @@
 <!-- 形式: `- <skill-name> — <用途>。発動: セッション<開始|終了>。` -->
 
 - `pr-open` — gh 未導入環境で push 後の PR 作成 URL を抽出・提示する。発動: セッション終了 (Step 7)。
+- `lint-build-push` — push 直前に lint → build → test を連続実行してゲートチェックする。発動: セッション終了 (Step 5 / Step 7 直前)。
