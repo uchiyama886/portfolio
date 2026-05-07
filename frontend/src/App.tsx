@@ -1,3 +1,4 @@
+import { About } from './components/About'
 import { Hero } from './components/Hero'
 import { Links } from './components/Links'
 import { portfolio } from './data/portfolio'
@@ -9,6 +10,7 @@ function App() {
     <main className="container">
       <Hero {...portfolio.hero} />
       <Links items={portfolio.links} />
+      <About {...portfolio.about} />
     </main>
   )
 }
