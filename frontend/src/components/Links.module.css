@@ -59,3 +59,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@media (max-width: 480px) {
+  .section {
+    padding-block: var(--space-5);
+  }
+
+  .card {
+    padding: var(--space-3);
+  }
+}

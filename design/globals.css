@@ -164,6 +164,31 @@ a:hover {
   padding-inline: var(--layout-padding-inline);
 }
 
+/* ──────────── Responsive type scale ──────────── */
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .container {
+    padding-inline: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-inline: var(--space-3);
+  }
+}
+
 /* Visually hidden — for screen-reader-only labels */
 .visually-hidden {
   position: absolute;
