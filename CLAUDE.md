@@ -24,13 +24,15 @@ Case6/
 ├── cicd/                           GitHub Actions workflow とデプロイ運用
 │   ├── CLAUDE.md                   CI/CDチームの指示
 │   └── workflows-design.md         Workflow擬似コード・ブランチ戦略の詳細
+├── frontend/scripts/               Notion 同期スクリプト
+│   └── sync-notion.ts              Notion DB → portfolio.ts 自動生成
 └── .claude/                        Claude Code 設定・自動化基盤（各チームから symlink 経由で参照）
     ├── settings.json               プロジェクト共通の許可/拒否/環境変数/worktree最適化
-    ├── settings.local.json         個人MCP allow（gitignored）
+    ├── settings.local.json         個人MCP allow・Notion認証情報（gitignored）
     ├── workflow.md                 10ステップ作業フロー・引き継ぎプロトコル
     ├── automation-policy.md        繰り返し作業を3回で自動化するルール
     ├── memory/                     プロジェクト固有メモリ（repeated-tasks.md, test-failures-*.md 等）
-    ├── skills/                     プロジェクト固有Skill（自動化されたもの）
+    ├── skills/                     プロジェクト固有Skill（lint-build-push, pr-open, notion-sync-deploy）
     └── plans/                      実装プラン・調査メモ
 ```
 
@@ -52,6 +54,43 @@ Case6/
 - **自動化ポリシー**: [.claude/automation-policy.md](./.claude/automation-policy.md) に従い、繰り返し作業を Skill 化する。
 - **権限設定**: [.claude/settings.json](./.claude/settings.json) で許可/拒否/`ask` を一元管理。`.env` と秘密鍵は読み書き共に deny。
 - **コミット時の注意**: 自分の担当外（他チームのファイル）を `git add` に含めない。
+
+## Notion 同期 + 月次スケジュール実行
+
+`portfolio.ts` の動的セクション（skills / works / career）は Notion DB から自動同期できる。
+
+### 手動実行
+
+```bash
+cd frontend
+npm run sync-notion   # 変更があれば portfolio.ts を更新、なければ何もしない
+```
+
+### 月次自動実行のセットアップ手順
+
+1. **認証情報を設定**（初回のみ）: `.claude/settings.local.json` の `env` セクションに `NOTION_TOKEN`（`ntn_xxx` 形式）と各 DB ID を追記する。詳細は README.md 参照。
+
+2. **ルーティン作成**: Claude Code セッション内で `/schedule` を実行し「Create」を選択。
+
+3. **設定値の目安**:
+   - スケジュール: 毎月1日 JST 9:00 → cron `0 0 1 * *`（UTC）
+   - リポジトリ: `https://github.com/uchiyama886/portfolio`
+   - MCP: Notion コネクター（`77192eed-3d27-48f3-b120-2ffebbb7e755`）を接続
+   - プロンプト骨子: `notion-sync-deploy` Skill の手順を参照
+
+4. **管理**: https://claude.ai/code/routines で一覧・編集・無効化。
+
+### 全自動フロー（notion-sync-deploy Skill）
+
+```
+Notion DB 更新
+    ↓ 毎月1日 /schedule 自動起動 (または手動: Skill("notion-sync-deploy"))
+npm run sync-notion     # 差分なし → 終了 / あり → portfolio.ts 更新
+    ↓
+npm run lint && build && test
+    ↓
+git commit + push → deploy.yml → GitHub Pages 自動デプロイ
+```
 
 ## 参照元
 
