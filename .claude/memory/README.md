@@ -10,6 +10,7 @@
 - `pr-creation-without-gh.md` — gh 未導入環境で PR を作るための compare URL 組み立て手順（2026-05-07）
 - `vite-public-assets-base-url.md` — Vite public アセットと GitHub Pages base パスの正しい参照方法（2026-05-07）
 - `phase4-retro.md` — Phase 4 振り返り。memory 整理・Skill 化の判断基準と知見（2026-05-07）
+- `notion-sync-retro.md` — Notion同期フェーズ振り返り。プロパティ名ズレの原因と lint-build-push Skill 改善候補（2026-05-09）
 
 ## ルール
 
