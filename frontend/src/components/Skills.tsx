@@ -70,7 +70,7 @@ export function Skills({ items, works }: SkillsProps) {
   const relatedWorks = selected ? findRelatedWorks(selected, works) : []
 
   return (
-    <section className={styles.section} aria-labelledby="skills-heading">
+    <section id="skills" className={styles.section} aria-labelledby="skills-heading">
       <h2 id="skills-heading" className={styles.heading}>
         Skills
       </h2>
