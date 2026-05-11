@@ -9,6 +9,12 @@ const CATEGORY_LABELS: Record<WorkCategory, string> = {
   personal: 'Personal',
 }
 
+const THUMB_GRADIENTS: Record<WorkCategory, string> = {
+  team: 'linear-gradient(135deg, #F4A261 0%, #E76F51 60%, #B5532F 100%)',
+  hackathon: 'linear-gradient(135deg, #5B8DEF 0%, #2383E2 55%, #173E87 100%)',
+  personal: 'linear-gradient(135deg, #6AB17C 0%, #2A9D8F 55%, #1F6F63 100%)',
+}
+
 function groupByCategory(items: Work[]): Record<WorkCategory, Work[]> {
   const groups: Record<WorkCategory, Work[]> = {
     team: [],
@@ -42,31 +48,41 @@ function WorkCard({ work }: { work: Work }) {
 
   return (
     <li className={styles.card}>
-      <h4 className={styles.title}>{titleNode}</h4>
-      {hasMeta && (
-        <p className={styles.meta}>
-          {work.role && <span className={styles.metaRole}>{work.role}</span>}
-          {work.role && work.period && (
-            <span className={styles.metaSeparator} aria-hidden="true">
-              ・
-            </span>
-          )}
-          {work.period && (
-            <span className={styles.metaPeriod}>{work.period}</span>
-          )}
-        </p>
-      )}
-      <p className={styles.description}>{work.description}</p>
-      {work.outcome && <p className={styles.outcome}>{work.outcome}</p>}
-      {work.stack && work.stack.length > 0 && (
-        <ul className={styles.stackList}>
-          {work.stack.map((tech) => (
-            <li key={tech} className={styles.stackChip}>
-              {tech}
-            </li>
-          ))}
-        </ul>
-      )}
+      <div
+        className={styles.thumb}
+        style={{ backgroundImage: THUMB_GRADIENTS[work.category] }}
+        aria-hidden="true"
+      >
+        <div className={styles.thumbOverlay} />
+        <span className={styles.thumbLabel}>{work.title}</span>
+      </div>
+      <div className={styles.body}>
+        <h4 className={styles.title}>{titleNode}</h4>
+        {hasMeta && (
+          <p className={styles.meta}>
+            {work.role && <span className={styles.metaRole}>{work.role}</span>}
+            {work.role && work.period && (
+              <span className={styles.metaSeparator} aria-hidden="true">
+                ・
+              </span>
+            )}
+            {work.period && (
+              <span className={styles.metaPeriod}>{work.period}</span>
+            )}
+          </p>
+        )}
+        <p className={styles.description}>{work.description}</p>
+        {work.outcome && <p className={styles.outcome}>{work.outcome}</p>}
+        {work.stack && work.stack.length > 0 && (
+          <ul className={styles.stackList}>
+            {work.stack.map((tech) => (
+              <li key={tech} className={styles.stackChip}>
+                {tech}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </li>
   )
 }
@@ -78,7 +94,7 @@ export interface WorksProps {
 export function Works({ items }: WorksProps) {
   const groups = groupByCategory(items)
   return (
-    <section className={styles.section} aria-labelledby="works-heading">
+    <section id="works" className={styles.section} aria-labelledby="works-heading">
       <h2 id="works-heading" className={styles.heading}>
         Works
       </h2>

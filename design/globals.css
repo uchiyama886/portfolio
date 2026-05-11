@@ -71,6 +71,9 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  /* 54px sticky nav + 8px breathing room */
+  scroll-padding-top: 62px;
 }
 
 body {

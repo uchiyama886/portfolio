@@ -39,7 +39,7 @@ export interface CareerProps {
 
 export function Career({ items }: CareerProps) {
   return (
-    <section className={styles.section} aria-labelledby="career-heading">
+    <section id="career" className={styles.section} aria-labelledby="career-heading">
       <h2 id="career-heading" className={styles.heading}>
         Career
       </h2>

@@ -3,7 +3,7 @@ import styles from './About.module.css'
 
 export function About({ affiliation, paragraphs }: AboutData) {
   return (
-    <section className={styles.section} aria-labelledby="about-heading">
+    <section id="about" className={styles.section} aria-labelledby="about-heading">
       <h2 id="about-heading" className={styles.heading}>
         About
       </h2>
